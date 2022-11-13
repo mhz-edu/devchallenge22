@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6-focal
+    container_name: mongo
+    env_file:
+      - ./.env
+    volumes:
+      - data:/data/db
+
+  backend:
+    build: .
+    container_name: backend
+    ports:
+      - '8080:3000'
+    env_file:
+      - ./.env
+    command: npm start
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - mongo
+
+volumes:
+  data:
