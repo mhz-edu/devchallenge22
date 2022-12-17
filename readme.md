@@ -33,4 +33,6 @@ Scores:
 
 Comment
 ###
-I haven't had much of experience with image processing before. I was able to find a library called `sharp`, but my algorithm was pretty basic and straighforward. That is why response took 16 seconds on my test example (on my machine of course). Probably I should have used streams somehow, but there wasn't enough time for me to rework my solution with them.
+I haven't had much of experience with image processing before. I was able to find a library called `sharp`, but my algorithm was pretty basic and straighforward. That is why response took ~19 seconds on my test example (on my machine of course). Probably I should have used streams somehow, but there wasn't enough time for me to rework my solution with them.
+
+> As a followup I've tried to rework my final solution a little bit. Despite the fact that `sharp` library is written with streams in mind, switching to sreams alone hasn't provided substantial performance increase. So I've tried to put image processing in a kind of worker process. I created a separate worker script with image processing. Main POST request controller contains logic to extract metadata and separate incoming image into stripes of 1 cell in height. Also to manage several child worker processes I've added worker pool logic. Also it turns out that getting cell stats by `sharp` takes about 50ms which had given 20s for 400 cell test image. So I've switched to direct byte counting. Overall, all these changes lowered response time to ~1s for test example image. Updates are available in the `final-followup` branch.
